@@ -43,7 +43,7 @@ function! s:apply_line_layout() range
 		let l:indent = strpart(getline(l:i) , 0 , match(getline(l:i) , '\S'))
 		let l:word[l:i] = split(getline(l:i) , '')
 		for l:j in range(len(l:align))
-			if len(l:word[l:i]) > l:j
+			if (len(l:word[l:i]) - 1) > l:j
 				let l:word[l:i][l:j] = l:word[l:i][l:j] . repeat(' ' , l:align[l:j] - len(l:word[l:i][l:j]))
 			endif
 		endfor
