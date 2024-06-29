@@ -5,7 +5,7 @@ function! s:displaylen(str)
 	let l:offset = (len(a:str) - strchars(a:str))/2
 	return l:len - l:offset
 endfunction
-function! s:get_line_layout() range
+function! s:get_line_layout(undo) range
 	let l:layout = {}
 	let l:word = {}
 	let l:layout['len'] = {}
@@ -26,19 +26,22 @@ function! s:get_line_layout() range
 			let l:layout['index'][l:i][l:j] = l:index
 			let l:layout['type'][l:i][l:j] = synID(l:i , l:index , 1)
 		endfor
-		call setline(l:i , l:indent . getline(l:i))
+		if a:undo
+			normal! u
+		else
+			call setline(l:i , l:indent . getline(l:i))
+		endif
 	endfor
 	return l:layout
 endfunction
 function! s:apply_line_layout(layout) range
-	let l:layout = a:layout
 	let l:align = {}
 	for l:i in range(line("'<") , line("'>"))
-		for l:j in range(len(l:layout['len'][l:i]))
+		for l:j in range(len(a:layout['len'][l:i]))
 			if !(has_key(l:align , l:j))
 				let l:align[l:j] = 0
 			endif
-			let l:align[l:j] = max([l:align[l:j] , l:layout['len'][l:i][l:j]])
+			let l:align[l:j] = max([l:align[l:j] , a:layout['len'][l:i][l:j]])
 		endfor
 	endfor
 	for l:i in range(line("'<") , line("'>"))
@@ -52,5 +55,5 @@ function! s:apply_line_layout(layout) range
 		call setline(l:i , l:indent . join(l:word , ' '))
 	endfor
 endfunction
-command! -range Vsqueeze '<,'> call s:get_line_layout()
-command! -range Valign '<,'> call s:apply_line_layout(s:get_line_layout())
+command! -range Vsqueeze '<,'> call s:get_line_layout(v:false)
+command! -range Valign '<,'> call s:apply_line_layout(s:get_line_layout(v:false))
