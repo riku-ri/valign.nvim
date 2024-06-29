@@ -47,7 +47,10 @@ Just add the full repository name without any options.
 			enum {} ;
 			```
 			In vim. Here syntax code of variables and comment is `0`,
-			so lines are splited by variables
+			and `ushort_t` is recognized as type.
+			So lines are splited by them.
+			> The result of `:'<,'>Vsyntax0` may be different
+			> if not only variable syntax code is assigned to `0`
 
 ## About multibyte characters
 
