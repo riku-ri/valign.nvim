@@ -93,4 +93,4 @@ function! s:syntax0layout(layout) range
 endfunction
 command! -range Vsqueeze '<,'> call s:get_line_layout(v:false)
 command! -range Valign '<,'> call s:apply_line_layout(s:get_line_layout(v:false))
-command! -range Vsyntax0 '<,'> call s:apply_line_layout(s:syntax0layout(s:get_line_layout(v:true)))
+command! -range Vsyntax0 '<,'> call s:apply_line_layout(s:syntax0layout(s:get_line_layout(v:false)))

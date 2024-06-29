@@ -31,6 +31,23 @@ Just add the full repository name without any options.
 	> all words will be aligned as no indent and insert the indent later.
 	- `Valign` : align all words splited by white space
 	- `Vsqueeze` : make all words splited by single space character
+	- `Vsyntax0` : align blocks splited by syntax code 0
+		- *E.g.*
+			```c
+			int     i  = 8  * anot     ;
+			static unsigned ushort_t    cs =   26 ;  /**/
+			inline char gzjsyldpr[]   =  "uieiuhiongaiaoe"     nocat ;
+			enum {} ;
+			```
+			will be replaced by `:'<,'>Vsyntax0` to
+			```c
+			int                      i           = 8 *               anot  ;
+			static unsigned ushort_t cs          = 26 ;              /**/
+			inline char              gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
+			enum {} ;
+			```
+			In vim. Here syntax code of variables and comment is `0`,
+			so lines are splited by variables
 
 ## About multibyte characters
 
