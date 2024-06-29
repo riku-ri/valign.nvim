@@ -7,21 +7,21 @@ function! s:displaylen(str)
 endfunction
 function! s:get_line_layout(undo) range
 	let l:layout = {}
-	let l:word = {}
 	let l:layout['len'] = {}
 	let l:layout['index'] = {}
 	let l:layout['type'] = {}
+	let l:layout['word'] = {}
 	for l:i in range(line("'<") , line("'>"))
 		let l:indent = strpart(getline(l:i) , 0 , match(getline(l:i) , '\S'))
-		let l:word[l:i] = split(getline(l:i) , '')
-		call setline(l:i , join(l:word[l:i] , ' '))
+		let l:layout['word'][l:i] = split(getline(l:i) , '')
+		call setline(l:i , join(l:layout['word'][l:i] , ' '))
 		let l:layout['len'][l:i] = {}
 		let l:layout['index'][l:i] = {}
 		let l:layout['type'][l:i] = {}
-		for l:j in range(len(l:word[l:i]))
-			"let l:len = len(l:word[l:i][l:j]) + 1
-			let l:len = s:displaylen(l:word[l:i][l:j]) + 1
-			let l:index = 1 + len(join(l:word[l:i][0:(l:j)] , ' ')) - l:len + 1
+		for l:j in range(len(l:layout['word'][l:i]))
+			"let l:len = len(l:layout['word'][l:i][l:j]) + 1
+			let l:len = s:displaylen(l:layout['word'][l:i][l:j]) + 1
+			let l:index = 1 + len(join(l:layout['word'][l:i][0:(l:j)] , ' ')) - l:len + 1
 			let l:layout['len'][l:i][l:j] = l:len - 1
 			let l:layout['index'][l:i][l:j] = l:index
 			let l:layout['type'][l:i][l:j] = synID(l:i , l:index , 1)
@@ -46,7 +46,7 @@ function! s:apply_line_layout(layout) range
 	endfor
 	for l:i in range(line("'<") , line("'>"))
 		let l:indent = strpart(getline(l:i) , 0 , match(getline(l:i) , '\S'))
-		let l:word = split(getline(l:i) , '')
+		let l:word = a:layout['word'][l:i]
 		for l:j in range(len(l:align))
 			if (len(l:word) - 1) > l:j
 				let l:word[l:j] = l:word[l:j] . repeat(' ' , l:align[l:j] - len(l:word[l:j]))
