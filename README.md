@@ -21,7 +21,7 @@ curl -LO https://raw.githubusercontent.com/riku-ri/valign.nvim/main/plugin/valig
 Or any other similar plugin manager.
 Just add the full repository name without any options.
 
-## Usage
+## Basic usage
 
 1. In visual mode, select lines to be aligned
 1. Type `:` to go into command mode **with selected range**,
@@ -31,26 +31,50 @@ Just add the full repository name without any options.
 	> all words will be aligned as no indent and insert the indent later.
 	- `Valign` : align all words splited by white space
 	- `Vsqueeze` : make all words splited by single space character
-	- `Vsyntax0` : align blocks splited by syntax code 0
-		- *E.g.*
-			```c
-			int     i  = 8  * anot     ;
-			static unsigned ushort_t    cs =   26 ;  /**/
-			inline char gzjsyldpr[]   =  "uieiuhiongaiaoe"     nocat ;
-			enum {} ;
-			```
-			will be replaced by `:'<,'>Vsyntax0` to
-			```c
-			int                      i           = 8 *               anot  ;
-			static unsigned ushort_t cs          = 26 ;              /**/
-			inline char              gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
-			enum {} ;
-			```
-			In vim. Here syntax code of variables and comment is `0`,
-			So lines are splited by them.
-			Here `ushort_t` is recognized as type but not syntax-0.
-			> The result of `:'<,'>Vsyntax0` may be different
-			> if not only variable syntax code is assigned to `0`
+
+## Align by syntax
+
+This plugin has a basic syntax-align command `Vsyntax0`.
+It groups each word splited by white space by thier syntax code
+*i.e.* `synID()` :
+- `synID()` is `0`
+- `synID()` is not `0`
+
+And then align each group.
+
+### *E.g.*
+
+For C language code blocks :
+```c
+int     i  = 8  * anot     ;
+static unsigned short    cs =   26 + 8 - anot ;  /**/
+inline char gzjsyldpr[]   =  "uieiuhiongaiaoe"     nocat ;
+```
+
+In some version of (neo)vim,
+C language operators were assigned to syntax code `0`.
+So `:'<,'>Vsyntax` will generate:
+```c
+int                   i =           8                 * anot ;
+static unsigned short cs =          26                +        8 - anot ; /**/
+inline char           gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
+```
+Here `=` `*` `+` is assigned to syntax code `0`
+so they were grouped with variables together.
+And strings/numbers after them were another group
+so they were at another align.
+
+And if operators are set to `cOperator` highlight group:
+```vim
+:syntax match cOperator "?\|+\|-\|\*\|;\|:\|,\|<\|>\|&\||\|!\|\~\|%\|=\|)\|(\|{\|}\|\.\|\[\|\]\|/\(/\|*\)\@!"
+```
+
+`:'<,'>Vsyntax` will generate the expected block:
+```c
+int                   i           = 8 *               anot  ;
+static unsigned short cs          = 26 + 8 -          anot  ; /**/
+inline char           gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
+```
 
 ## About multibyte characters
 
