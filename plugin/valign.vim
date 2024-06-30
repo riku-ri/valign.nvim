@@ -1,12 +1,3 @@
-function! s:displaylen(str)
-	"only for Chinese, sc. 3B/character
-	let l:len = len(a:str)
-	"let l:chars = strchars(a:str)
-	"let l:offset = (len(a:str) - strchars(a:str))/2
-
-	"return l:len - l:offset
-	return l:len
-endfunction
 function! s:get_line_layout(undo) range
 	let l:layout = {}
 	let l:layout['len'] = {}
@@ -22,7 +13,7 @@ function! s:get_line_layout(undo) range
 		let l:layout['type'][l:i] = []
 		for l:j in range(len(l:layout['word'][l:i]))
 			"let l:len = len(l:layout['word'][l:i][l:j]) + 1
-			let l:len = s:displaylen(l:layout['word'][l:i][l:j]) + 1
+			let l:len = strdisplaywidth({string}(l:layout['word'][l:i][l:j]) + 1
 			let l:index = 1 + len(join(l:layout['word'][l:i][0:(l:j)] , ' ')) - l:len + 1
 			call add(l:layout['len'][l:i] , l:len - 1)
 			call add(l:layout['index'][l:i] , l:index)

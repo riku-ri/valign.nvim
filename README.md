@@ -78,4 +78,5 @@ inline char           gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
 
 ## About multibyte characters
 
-TODO
+Follow `strdisplaywidth()` directly.
+`:help strdisplaywidth()` for more ditailes.
