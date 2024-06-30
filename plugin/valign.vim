@@ -1,3 +1,4 @@
+"syntax match cOperator "?\|+\|-\|\*\|;\|:\|,\|<\|>\|&\||\|!\|\~\|%\|=\|)\|(\|{\|}\|\.\|\[\|\]\|/\(/\|*\)\@!"
 function! s:displaylen(str)
 	"only for Chinese, sc. 3B/character
 	let l:len = len(a:str)
@@ -16,15 +17,15 @@ function! s:get_line_layout(undo) range
 		let l:layout['word'][l:i] = split(getline(l:i) , '')
 		call setline(l:i , join(l:layout['word'][l:i] , ' '))
 		let l:layout['len'][l:i] = []
-		let l:layout['index'][l:i] = {}
-		let l:layout['type'][l:i] = {}
+		let l:layout['index'][l:i] = []
+		let l:layout['type'][l:i] = []
 		for l:j in range(len(l:layout['word'][l:i]))
 			"let l:len = len(l:layout['word'][l:i][l:j]) + 1
 			let l:len = s:displaylen(l:layout['word'][l:i][l:j]) + 1
 			let l:index = 1 + len(join(l:layout['word'][l:i][0:(l:j)] , ' ')) - l:len + 1
 			call add(l:layout['len'][l:i] , l:len - 1)
-			let l:layout['index'][l:i][l:j] = l:index
-			let l:layout['type'][l:i][l:j] = synID(l:i , l:index , 1)
+			call add(l:layout['index'][l:i] , l:index)
+			call add(l:layout['type'][l:i] , synID(l:i , l:index , 1))
 		endfor
 		if a:undo
 			normal! u
@@ -58,36 +59,22 @@ endfunction
 function! s:syntax0layout(layout) range
 	let l:layout = { 'len' : {} , 'word' : {} }
 	for l:i in range(line("'<") , line("'>"))
-		let l:word = split(getline(l:i) , '')
-		let l:index0 = []
-		for l:j in keys(a:layout['type'][l:i])
-			if a:layout['type'][l:i][l:j]==0
-				call add(l:index0 , l:j)
-			endif
-		endfor
-		let l:_j = 0
-		if len(l:index0)==0
-			call add(l:index0 , max(keys(a:layout['type'][l:i])))
-		endif
-		if l:index0[-1]!=max(keys(a:layout['type'][l:i]))
-			call add(l:index0 , max(keys(a:layout['type'][l:i])))
-		endif
 		let l:layout['word'][l:i] = []
 		let l:layout['len'][l:i] = []
-		for l:j in l:index0
-			if len(l:index0)==1
-				call add(l:layout['word'][l:i] , join(l:word[0:-1] , ' '))
-				call add(l:layout['len'][l:i] , len(join(l:word[0:-1] , ' ')))
+		let l:word = split(getline(l:i) , '')
+		let l:index0 = []
+		call map(a:layout['type'][l:i] , 'v:val!=0')
+		call add(l:layout['word'][l:i] , '')
+		let l:flag = a:layout['type'][l:i][0]
+		for l:j in range(len(a:layout['type'][l:i]))
+			if a:layout['type'][l:i][l:j]==l:flag
+				let l:layout['word'][l:i][-1] = trim(l:layout['word'][l:i][-1] . ' ' . l:word[l:j])
 			else
-				if l:j > l:_j
-					call add(l:layout['word'][l:i] , join(l:word[(l:_j):(l:j-1)] , ' '))
-					call add(l:layout['len'][l:i] , len(join(l:word[(l:_j):(l:j-1)] , ' ')))
-				endif
 				call add(l:layout['word'][l:i] , l:word[l:j])
-				call add(l:layout['len'][l:i] , len(l:word[l:j]))
+				let l:flag = !l:flag
 			endif
-			let l:_j = l:j + 1
 		endfor
+		let l:layout['len'][l:i] = mapnew(l:layout['word'][l:i] , 'len(v:val)')
 	endfor
 	return l:layout
 endfunction
