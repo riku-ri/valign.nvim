@@ -53,7 +53,7 @@ inline char gzjsyldpr[]   =  "uieiuhiongaiaoe"     nocat ;
 
 In some version of (neo)vim,
 C language operators were assigned to syntax code `0`.
-So `:'<,'>Vsyntax` will generate:
+So `:'<,'>Vsyntax` will generate :
 ```c
 int                   i =           8                 * anot ;
 static unsigned short cs =          26                +        8 - anot ; /**/
@@ -64,12 +64,12 @@ so they were grouped with variables together.
 And strings/numbers after them were another group
 so they were at another align.
 
-And if operators are set to `cOperator` highlight group:
+And if operators are set to `cOperator` highlight group :
 ```vim
 :syntax match cOperator "?\|+\|-\|\*\|;\|:\|,\|<\|>\|&\||\|!\|\~\|%\|=\|)\|(\|{\|}\|\.\|\[\|\]\|/\(/\|*\)\@!"
 ```
 
-`:'<,'>Vsyntax` will generate the expected block:
+`:'<,'>Vsyntax` will generate the expected block :
 ```c
 int                   i           = 8 *               anot  ;
 static unsigned short cs          = 26 + 8 -          anot  ; /**/
@@ -78,8 +78,26 @@ inline char           gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
 
 ## About multibyte characters
 
-Currently all multibyte characters will be treated as :
-- 3 bytes in storage
-- Shown 2 character width in screen
+Currently this plugin can **only** deal with "words" that :
+- ASCII only
+- Mix ASCII and charectors that :
+	- 3 bytes in storage
+	- Shown 2 character width in screen
 
 Like how CJK UTF-8 monospace character should be.
+
+*E.g.* For :
+```
+Here如果你想 混合混合混合混合混合混合 English-words 和 中文
+Currenty valgin.nvim这个插件 是可以处理的 应该 ...
+```
+
+`:'<,'>Valign` will generate :
+```
+Here如果你想 混合混合混合混合混合混合 English-words 和  中文
+Currenty     valgin.nvim这个插件  是可以处理的 应该 ...
+```
+
+You may see blocks above didn't align correctly,
+it may because browser/github/markdown(code)
+didn't apply a fixed font for Chinese.
