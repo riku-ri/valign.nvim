@@ -1,4 +1,3 @@
-"syntax match cOperator "?\|+\|-\|\*\|;\|:\|,\|<\|>\|&\||\|!\|\~\|%\|=\|)\|(\|{\|}\|\.\|\[\|\]\|/\(/\|*\)\@!"
 function! s:displaylen(str)
 	"only for Chinese, sc. 3B/character
 	let l:len = len(a:str)
