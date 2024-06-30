@@ -80,7 +80,7 @@ inline char           gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
 
 Currently this plugin can **only** deal with "words" that :
 - ASCII only
-- Mix ASCII and charectors that :
+- Mix ASCII and characters that :
 	- 3 bytes in storage
 	- Shown 2 character width in screen
 
@@ -99,5 +99,5 @@ Currenty     valgin.nvim这个插件  是可以处理的 应该 ...
 ```
 
 You may see blocks above didn't align correctly,
-it may because browser/github/markdown(code)
+may be it was because browser/github/markdown(code)
 didn't apply a fixed font for Chinese.
