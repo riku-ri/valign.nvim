@@ -78,26 +78,4 @@ inline char           gzjsyldpr[] = "uieiuhiongaiaoe" nocat ;
 
 ## About multibyte characters
 
-Currently this plugin can **only** deal with "words" that :
-- ASCII only
-- Mix ASCII and characters that :
-	- 3 bytes in storage
-	- Shown 2 character width in screen
-
-Like how CJK UTF-8 monospace character should be.
-
-*E.g.* For :
-```
-Here如果你想 混合混合混合混合混合混合 English-words 和 中文
-Currenty valgin.nvim这个插件 是可以处理的 应该 ...
-```
-
-`:'<,'>Valign` will generate :
-```
-Here如果你想 混合混合混合混合混合混合 English-words 和  中文
-Currenty     valgin.nvim这个插件  是可以处理的 应该 ...
-```
-
-You may see blocks above didn't align correctly,
-may be it was because browser/github/markdown(code)
-didn't apply a fixed font for Chinese.
+TODO

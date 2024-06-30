@@ -1,9 +1,11 @@
 function! s:displaylen(str)
 	"only for Chinese, sc. 3B/character
 	let l:len = len(a:str)
-	let l:chars = strchars(a:str)
-	let l:offset = (len(a:str) - strchars(a:str))/2
-	return l:len - l:offset
+	"let l:chars = strchars(a:str)
+	"let l:offset = (len(a:str) - strchars(a:str))/2
+
+	"return l:len - l:offset
+	return l:len
 endfunction
 function! s:get_line_layout(undo) range
 	let l:layout = {}
