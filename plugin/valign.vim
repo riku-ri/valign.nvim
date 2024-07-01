@@ -13,7 +13,7 @@ function! s:get_line_layout(undo) range
 		let l:layout['type'][l:i] = []
 		for l:j in range(len(l:layout['word'][l:i]))
 			"let l:len = len(l:layout['word'][l:i][l:j]) + 1
-			let l:len = strdisplaywidth({string}(l:layout['word'][l:i][l:j]) + 1
+			let l:len = strdisplaywidth(l:layout['word'][l:i][l:j]) + 1
 			let l:index = 1 + len(join(l:layout['word'][l:i][0:(l:j)] , ' ')) - l:len + 1
 			call add(l:layout['len'][l:i] , l:len - 1)
 			call add(l:layout['index'][l:i] , l:index)
